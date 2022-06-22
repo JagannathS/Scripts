@@ -25,45 +25,45 @@ snap connect mjpg-streamer:camera
 # in case you want to change the id to name change $3 >= 1000 && $3 <2000 in below statement to $1==<username>
 # Default download directory for source code is user home downloads folder, 
 
-$HOMEDIR = `awk -F: ' $3 >= 1000 && $3 <2000 {print $6}' /etc/passwd`
+HOMEDIR=$(awk -F: ' $3 >= 1000 && $3 <2000 {print $6}' /etc/passwd)
 
 #Install uhd from source, this installs the latest verion
-cd $HOMEDIR/Downloads
+cd "$HOMEDIR"/Downloads || exit
 git clone https://github.com/EttusResearch/uhd.git
 # shift to a branch here using git checkout command if needed, uncomment below line and update branch required
 # git checkout UHD-3.15.LTS
-cd uhd/host
+cd uhd/host || exit
 mkdir build
-cd build
+cd build || exit
 cmake ../
-make -j`nproc`
-make test -j`nproc`
+make -j"$(nproc)"
+make test -j"$(nproc)"
 sudo make install
 sudo ldconfig
 #Download usrp images
 uhd_images_downloader
 
 #Install srsGUI from source, this is optional comment the section if srsGUI is not required
-cd $HOMEDIR/Downloads
+cd "$HOMEDIR"/Downloads || exit
 git clone https://github.com/srsran/srsGUI.git
-cd srsGUI
+cd srsGUI || exit
 mkdir build
-cd build
+cd build || exit
 cmake ../
 make
-make test -j`nproc`
+make test -j"$(nproc)"
 sudo make install
 sudo ldconfig
 
 #Install srsRAN from source
-cd $HOMEDIR/Downloads
+cd "$HOMEDIR"/Downloads || exit
 git clone https://github.com/srsRAN/srsRAN.git
-cd srsRAN
+cd srsRAN || exit
 mkdir build
-cd build
+cd build || exit
 cmake ../
-make -j`nproc`
-make test -j`nproc`
+make -j"$(nproc)"
+make test -j"$(nproc)"
 sudo make install
 #install default configurations to run SRSRAN components
 srsran_install_configs.sh user
