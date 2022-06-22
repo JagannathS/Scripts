@@ -21,29 +21,29 @@ sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy py
 # in case you want to change the id to name change $3 >= 1000 && $3 <2000 in below statement to $1==<username>
 # Default download directory for source code is user home downloads folder, 
 
-$HOMEDIR = `awk -F: ' $3 >= 1000 && $3 <2000 {print $6}' /etc/passwd`
+HOMEDIR=$(awk -F: ' $3 >= 1000 && $3 <2000 {print $6}' /etc/passwd)
 
 #Install volk from source
-cd $HOMEDIR/Downloads
+cd "$HOMEDIR"/Downloads || exit
 git clone --recursive https://github.com/gnuradio/volk.git
-cd volk
+cd volk || exit
 mkdir build
-cd build
+cd build || exit
 cmake -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 ../
-make -j`nproc`
-make test -j`nproc`
+make -j"$(nproc)"
+make test -j"$(nproc)"
 sudo make install
 sudo ldconfig
      
 #Install gnuradio from source	 
-cd /home/lte/Downloads
+cd /home/lte/Downloads || exit
 git clone https://github.com/gnuradio/gnuradio.git
-cd gnuradio
+cd gnuradio || exit
 mkdir build
-cd build
+cd build || exit
 cmake -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 ../
-make -j`nproc`
-make test -j`nproc`
+make -j"$(nproc)"
+make test -j"$(nproc)"
 sudo make install
 sudo ldconfig
 
